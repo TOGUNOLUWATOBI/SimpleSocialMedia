@@ -9,22 +9,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PostDao {
-    public static Post getPost(int id)
-    {
-        AtomicReference<Post> reference = new AtomicReference<>();
-        HibernateUtil.doTransaction(session ->
-        {
-            JPAQuery<Post> query = new JPAQuery<>(session.getSessionFactory().createEntityManager());
-            QPost qPost = QPost.post;
-            Post post=query.select(qPost).
-                    from(qPost).
-                    where(qPost.id.eq(id)).
-                    fetchOne();
-            reference.set(post);
-        });
-        return reference.get();
-    }
-
+    //Get a post by the title
     public static Post getPost(String title)
     {
         AtomicReference<Post> reference = new AtomicReference<>();

@@ -16,22 +16,6 @@ public class CommentDao {
         return HibernateUtil.doTransaction(session -> session.save(comment));
     }
 
-    public static Comment getComment(int id)
-    {
-        AtomicReference<Comment> reference=new AtomicReference<>();
-        HibernateUtil.doTransaction(session ->
-        {
-            JPAQuery<Comment> query=new JPAQuery<>(session.getSessionFactory().createEntityManager());
-            QComment qComment=QComment.comment;
-            Comment comment = query.select(qComment).
-                    from(qComment).
-                    where(qComment.id.eq(id)).
-                    fetchFirst();
-            reference.set(comment);
-        });
-        return reference.get();
-    }
-
 
     public static List<Comment> getAllComments(Post post)
     {
