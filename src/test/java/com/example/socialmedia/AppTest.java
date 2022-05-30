@@ -1,20 +1,83 @@
 package com.example.socialmedia;
 
-import static org.junit.Assert.assertTrue;
-
+import com.example.socialmedia.DAO.CommentDao;
+import com.example.socialmedia.DAO.PostDao;
+import com.example.socialmedia.DAO.UserDao;
+import com.example.socialmedia.Entity.Comment;
+import com.example.socialmedia.Entity.Post;
+import com.example.socialmedia.Entity.User;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Unit test for simple App.
  */
 public class AppTest 
 {
+
     /**
      * Rigorous Test :-)
+     *
+     * Please run each test individually
      */
+     @Test
+     public void testUserAdded() {
+         //Add users to the system
+         UserDao.addUser(new User("bebs", "bebs"));
+         UserDao.addUser(new User("dbd", "dbd"));
+
+         //retrieve all users in the db
+         List<User> users = UserDao.getAllUsers();
+
+         //assert that the db is not empty
+         assertNotNull(users);
+
+         //Check the number of users are correct
+         assertEquals(2, users.size());
+     }
+
+     @Test
+    public void testAddPost() {
+         UserDao.addUser(new User("bebs", "bebs"));
+
+         User user = UserDao.getUser("bebs");
+         assertNotNull(user);
+
+         //Create and Add post
+         Post post = new Post(user, "Java errors and stackoverflow", "Java gives a lot of errors");
+         PostDao.addPost(post);
+
+         //retrieve post from db
+         List<Post> posts = PostDao.getAllPosts();
+         //check db post
+         assertNotNull(posts);
+         assertEquals(1, posts.size());
+
+    }
+
     @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+    public void testAddComment() {
+        UserDao.addUser(new User("bebs", "bebs"));
+
+        User user = UserDao.getUser("bebs");
+        assertNotNull(user);
+
+        Post post = new Post(user, "Java errors and stackoverflow", "Java gives a lot of errors");
+        PostDao.addPost(post);
+
+        List<Post> posts = PostDao.getAllPosts();
+        assertNotNull(posts);
+        assertEquals(1, posts.size());
+
+        Comment comment = new Comment(user,post,"You are just starting.");
+        CommentDao.addComment(comment);
+        List<Comment> comments = CommentDao.getAllComments(post);
+        assertNotNull(comments);
+        assertEquals(1,comments.size());
+
     }
 }
